@@ -1,69 +1,51 @@
 package com.play.util;
 
+import com.play.base.BaseUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
 
 /**
- * MyBatis工具类
- *
- * @author lee
- *         2015-2-6
+ * Mybatis工具类
  */
-public class MyBatisUtil {
+public class MyBatisUtil extends BaseUtil {
+
+    /************单例************************************/
+    private MyBatisUtil() {}
+
+    private static MyBatisUtil instance;
+
+    public static MyBatisUtil getInstance() {
+        return instance == null ? (instance = new MyBatisUtil()) : instance;
+    }
+
+    private static final Logger log = Logger.getLogger(MyBatisUtil.class);
 
     private static SqlSessionFactory sqlSessionFactory;
 
-    /**
-     * 数据库会话
-     */
-    private SqlSession sqlSession;
-
-    private static MyBatisUtil instance = new MyBatisUtil();
-
-    private MyBatisUtil() {}
-
-    public static MyBatisUtil getInstance() {
-        return instance;
-    }
-
-    /**
-     * 加载 配置文件
-     */
+    // 创建sqlSessionFactory
     static{
         try {
             SqlSessionFactoryBuilder FactoryBuilder = new SqlSessionFactoryBuilder();
-
-            FileInputStream fi = getMyBatisPro();
-
+            FileInputStream fi = PropertyUtil.getInstance().getFileInputStream(CONFIG_ROOT + "/mybatisConf.xml");
             sqlSessionFactory = FactoryBuilder.build(fi);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            log.error("加载配置文件出错", e);
         }
     }
 
     /**
-     * 取得会话
-     *
-     * @param autoCommit
-     * @return
+     * 获取session会话
+     * @param autoCommit 是否自动提交
+     * @return session
      */
     public SqlSession getSession(boolean autoCommit) {
           return sqlSessionFactory.openSession(autoCommit);
     }
 
-    /**
-     * 获取MyBatis配置
-     *
-     * @return
-     * @throws Exception
-     */
-    public static FileInputStream getMyBatisPro() throws Exception {
-        FileInputStream fi = new FileInputStream("config/mybatisConf.xml");
-        return fi ;
-    }
+
 
 }
