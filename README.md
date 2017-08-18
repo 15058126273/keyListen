@@ -4,3 +4,5 @@
 
 Java Version: 1.8.0 <br/>
 Main Class: com.play.KeyHook <br/>
+
+<img src="http://c.csdnimg.cn/comm_ask/images/qrcode.png" />
