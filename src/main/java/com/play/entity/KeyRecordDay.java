@@ -12,7 +12,7 @@ public class KeyRecordDay implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id; // id
+    private Integer id; // id
     private String user; // 用户
     private Date date; // 时间
     private Integer beatNum; // 敲击次数
@@ -25,11 +25,11 @@ public class KeyRecordDay implements Serializable {
         this.user = user;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

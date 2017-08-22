@@ -19,9 +19,9 @@ public class Main extends Base {
      */
     public static void main(String[] args) throws IOException {
 
-        // 初始化log4j
-        ServerInit.getInstance().initLog4j();
-        System.out.println("initLog4j success....");
+        // 初始化服务
+        ServerInit.getInstance().initAll();
+        System.out.println("init success....");
 
         // 开启程序窗口
         frame = new MyFrame();

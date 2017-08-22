@@ -11,16 +11,16 @@ public class KeyRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private long id; // id
+    private Integer id; // id
     private String user; // 用户
     private Date time; // 时间
-    private int beatNum; // 敲击次数
+    private Integer beatNum; // 敲击次数
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -32,11 +32,11 @@ public class KeyRecord implements Serializable {
         this.time = time;
     }
 
-    public int getBeatNum() {
+    public Integer getBeatNum() {
         return beatNum;
     }
 
-    public void setBeatNum(int beatNum) {
+    public void setBeatNum(Integer beatNum) {
         this.beatNum = beatNum;
     }
 

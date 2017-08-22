@@ -1,6 +1,8 @@
 package com.play;
 
 import com.play.base.Base;
+import com.play.dao.impl.KeyRecordDaoImpl;
+import com.play.dao.impl.KeyRecordDayDaoImpl;
 import com.play.entity.KeyRecord;
 import com.play.entity.KeyRecordDay;
 import com.play.mapper.KeyRecordDayMapper;
@@ -52,40 +54,33 @@ class DataManager extends Base {
      * @param addNum 新增键数
      */
     private static int addBeat(int addNum) {
-        SqlSession session = MyBatisUtil.getInstance().getSession(false);
-        KeyRecordMapper keyRecordMapper = session.getMapper(KeyRecordMapper.class);
         KeyRecord keyRecord = new KeyRecord();
         keyRecord.setBeatNum(addNum);
         keyRecord.setTime(new Date());
         keyRecord.setUser(HOST_ADDRESS);
-        keyRecordMapper.save(keyRecord);
-
+        KeyRecordDaoImpl.keyRecordDao.add(keyRecord);
         // 更新日记录
-        int today = addToDayRecord(session, addNum);
-        // 提交事务
-        session.commit();
-        session.close();
-        return today;
+        return addToDayRecord(addNum);
     }
 
     /**
      * 更新日记录
-     * @param session 事务
      * @param addNum 新增键数
      * @return 今日总键数
      */
-    private static int addToDayRecord(SqlSession session, int addNum) {
-        KeyRecordDayMapper keyRecordDayMapper = session.getMapper(KeyRecordDayMapper.class);
+    private static int addToDayRecord(int addNum) {
+        KeyRecordDayDaoImpl keyRecordDayDao = KeyRecordDayDaoImpl.keyRecordDayDao;
         KeyRecordDay keyRecordDay = new KeyRecordDay(HOST_ADDRESS);
         keyRecordDay.setDate(new Date());
-        List<KeyRecordDay> list = keyRecordDayMapper.findByT(keyRecordDay);
-        if (list == null || list.isEmpty()) {
+        keyRecordDay = keyRecordDayDao.getObject(keyRecordDay);
+        if (keyRecordDay == null) {
+            keyRecordDay = new KeyRecordDay(HOST_ADDRESS);
+            keyRecordDay.setDate(new Date());
             keyRecordDay.setBeatNum(addNum);
-            keyRecordDayMapper.save(keyRecordDay);
+            keyRecordDayDao.add(keyRecordDay);
         } else {
-            keyRecordDay = list.get(0);
             keyRecordDay.setBeatNum(keyRecordDay.getBeatNum() + addNum);
-            keyRecordDayMapper.update(keyRecordDay);
+            keyRecordDayDao.update(keyRecordDay);
         }
         return keyRecordDay.getBeatNum();
     }
