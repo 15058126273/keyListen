@@ -8,3 +8,7 @@ Main Class: com.play.KeyHook <br/>
 1.0版本运行后是这样的 0^0 
 
 <img src="https://github.com/15058126273/keyListen/blob/master/resource/1503020822(1).png" />
+
+1.0.1版本运行后是这样的 0^0
+
+<img src="https://github.com/15058126273/keyListen/blob/master/resource/1503591499(1).png" />
