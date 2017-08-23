@@ -19,12 +19,14 @@ public class SQLiteTest1 {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:key_record.db");
             Statement stat = conn.createStatement();
 //            stat.executeUpdate("create table key_record.key_record(id INTEGER PRIMARY KEY, user varchar(20), time datetime, beat_num integer);");
-            ResultSet rs = stat.executeQuery("select * from sqlite_master where type = 'table' and name ='key_record'");
+            ResultSet rs = stat.executeQuery("select * from key_record_day");
             while (rs.next()) {
-                System.out.println("name = " + rs.getString("name") );
+                System.out.println("id = " + rs.getInt("id") + ", user = " + rs.getString("user") + ", date = " + rs.getDate("date") + ", num = " + rs.getInt("beat_num") );
             }
+//            stat.executeUpdate("delete from key_record_day where date is null");
 
-//            stat.executeUpdate("drop table tbl1 if exist");
+//            stat.executeUpdate("drop table key_record");
+//            stat.executeUpdate("drop table key_record_day");
 //            stat.executeUpdate("create table tbl1(name varchar(20), salary int);");//创建一个表，两列
 //            stat.executeUpdate("insert into tbl1 values('ZhangSan',8000);");//插入数据
 //            stat.executeUpdate("insert into tbl1 values('LiSi',7800);");

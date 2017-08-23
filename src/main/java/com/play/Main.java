@@ -1,6 +1,7 @@
 package com.play;
 
 import com.play.base.Base;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ import java.io.IOException;
  */
 public class Main extends Base {
 
+    private static final Logger log = Logger.getLogger(Main.class);
     private static MyFrame frame;
     private static KeyHook keyHook;
 
@@ -21,15 +23,15 @@ public class Main extends Base {
 
         // 初始化服务
         ServerInit.getInstance().initAll();
-        System.out.println("init success....");
+        log.info("init success....");
 
         // 开启程序窗口
         frame = new MyFrame();
-        System.out.println("start frame success....");
+        log.info("start frame success....");
 
         // 启动更新数据线程
         new DataManager();
-        System.out.println("start dataManager success....");
+        log.info("start dataManager success....");
 
         // 启动监听键盘线程
         keyHook = new KeyHook();

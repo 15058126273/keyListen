@@ -5,15 +5,10 @@ import com.play.dao.impl.KeyRecordDaoImpl;
 import com.play.dao.impl.KeyRecordDayDaoImpl;
 import com.play.entity.KeyRecord;
 import com.play.entity.KeyRecordDay;
-import com.play.mapper.KeyRecordDayMapper;
-import com.play.mapper.KeyRecordMapper;
-import com.play.util.MyBatisUtil;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 程序数据处理

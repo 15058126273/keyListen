@@ -1,6 +1,7 @@
 package com.play.base;
 
 import com.play.util.SQLiteUtil;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class BaseDaoImpl<T> implements BaseDao<T> {
 
+    private static final Logger log = Logger.getLogger(BaseDaoImpl.class);
 
     public boolean add(T t) {
         return false;
@@ -46,7 +48,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
      * 执行增删改
      * @param sql sql
      * @param parameters 参数
-     * @return
+     * @return 影响条数
      */
     protected static int execute(String sql, Object[] parameters){
         Connection con = SQLiteUtil.openConnection();
@@ -101,10 +103,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
                 for (int i = 0; i < columnList.size(); i++) {
                     // 获取列名
                     String column = columnList.get(i);
-
-                    // 根据列名创建set方法
-                    String setMethod = "set" + column.substring(0, 1).toUpperCase() + column.substring(1);
-                    System.out.println("cloumn : " + column + " , setMethod : " +setMethod);
+                    // 根据列名创建set方法(将数据库字段中的'_',替换掉)
+                    String setMethod = "set" + column.replace("_", "");
                     // 获取clazz中所有方法对应的Method对象
                     Method[] ms = clazz.getMethods();
                     // 循环遍历ms
@@ -112,10 +112,16 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
                         // 获取每一个method对象
                         Method m = ms[j];
                         // 判断m中对应的方法名和数据库中列名创建的set方法名是否形同
-                        if (m.getName().equals(setMethod)) {
+                        if (m.getName().equalsIgnoreCase(setMethod)) {
                             // 反调set方法封装数据
-                            m.invoke(obj, rs.getObject(column));// 获取rs中对应的值，封装到obj中
-                            break; // 提高效率
+                            Object o = rs.getObject(column);
+                            try {
+                                m.invoke(obj, o);// 获取rs中对应的值，封装到obj中
+                                log.debug("map column success > column : " + column);
+                                break;
+                            } catch (Exception e){
+                                log.debug("setMethod arguments is illegal, illegal column : " + column + ", type : " + o.getClass().getName());
+                            }
                         }
                     }
                 }

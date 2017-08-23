@@ -18,7 +18,6 @@ public class KeyRecordDaoImpl extends BaseDaoImpl<KeyRecord> implements KeyRecor
 
     public boolean add(KeyRecord t) {
         String sql = "insert into " + TABLE + " (id, user, time, beat_num) values (?,?,?,?)";
-        System.out.println("" + t.getId() + ":" + t.getUser() +":" +t.getTime()+":" +t.getBeatNum() );
         return execute(sql, new Object[]{t.getId(), t.getUser(), t.getTime(), t.getBeatNum()}) == 1;
     }
 

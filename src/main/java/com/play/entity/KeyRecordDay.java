@@ -47,6 +47,10 @@ public class KeyRecordDay implements Serializable {
         }
     }
 
+    public void setDate(Long date) {
+        this.date = new Date(date);
+    }
+
     public Integer getBeatNum() {
         return beatNum;
     }
@@ -61,5 +65,15 @@ public class KeyRecordDay implements Serializable {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "KeyRecordDay{" +
+                "id=" + id +
+                ", user='" + user + '\'' +
+                ", date=" + date +
+                ", beatNum=" + beatNum +
+                '}';
     }
 }

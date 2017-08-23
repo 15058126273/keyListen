@@ -8,7 +8,6 @@ import org.apache.log4j.PropertyConfigurator;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
@@ -45,12 +44,14 @@ class ServerInit extends Base {
     private void initLog4j() throws IOException{
         Properties properties = PropertyUtil.getInstance().getProperties(CONFIG_ROOT + "/log4j.properties");
         PropertyConfigurator.configure(properties);
+        log.info("initLog4j success>>>>>>>>>>>>>>>>>>>>");
     }
 
     /**
      * 初始化数据库连接信息
      */
     private void initSqlite() {
+        log.info("initSqlite >>>>>>>>>>>>>>>>>>>>");
         Connection connection = null;
         Statement stat = null;
         ResultSet rs = null;
