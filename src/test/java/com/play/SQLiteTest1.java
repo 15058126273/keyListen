@@ -21,7 +21,12 @@ public class SQLiteTest1 {
 //            stat.executeUpdate("create table key_record.key_record(id INTEGER PRIMARY KEY, user varchar(20), time datetime, beat_num integer);");
             ResultSet rs = stat.executeQuery("select * from key_record_day");
             while (rs.next()) {
-                System.out.println("id = " + rs.getInt("id") + ", user = " + rs.getString("user") + ", date = " + rs.getDate("date") + ", num = " + rs.getInt("beat_num") );
+                System.out.println("[" + rs.getInt("id") + ", " + rs.getString("user") + ", " + rs.getDate("date") + ", " + rs.getInt("beat_num") + "]" );
+            }
+            System.out.println("-------------------------------------------------------------------------");
+            rs = stat.executeQuery("select * from key_record");
+            while (rs.next()) {
+                System.out.println("[" + rs.getInt("id") + ", " + rs.getString("user") + ", " + rs.getDate("time") + " " +rs.getTime("time") + ", " + rs.getInt("beat_num") + "]" );
             }
 //            stat.executeUpdate("delete from key_record_day where date is null");
 
