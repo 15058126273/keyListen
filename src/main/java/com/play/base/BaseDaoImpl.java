@@ -16,11 +16,11 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     private static final Logger log = Logger.getLogger(BaseDaoImpl.class);
 
-    public boolean add(T t) {
+    public boolean save(T t) {
         return false;
     }
 
-    public boolean remove(int id) {
+    public boolean delete(int id) {
         return false;
     }
 
@@ -28,19 +28,19 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         return false;
     }
 
-    public T getObjectById(int id) {
+    public T findById(int id) {
         return null;
     }
 
-    public T getObject(T t) {
+    public T findByT(T t) {
         return null;
     }
 
-    public List<T> getObjects(T t) {
+    public List<T> findListByT(T t) {
         return null;
     }
 
-    public List<T> getObjects() {
+    public List<T> findAll() {
         return null;
     }
 

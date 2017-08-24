@@ -16,12 +16,12 @@ public class KeyRecordDaoImpl extends BaseDaoImpl<KeyRecord> implements KeyRecor
     private static final String TABLE = Constants.DATA_BASE + "key_record";
     public static final KeyRecordDaoImpl keyRecordDao = new KeyRecordDaoImpl();
 
-    public boolean add(KeyRecord t) {
+    public boolean save(KeyRecord t) {
         String sql = "insert into " + TABLE + " (id, user, time, beat_num) values (?,?,?,?)";
         return execute(sql, new Object[]{t.getId(), t.getUser(), t.getTime(), t.getBeatNum()}) == 1;
     }
 
-    public boolean remove(int id) {
+    public boolean delete(int id) {
         String sql = "delete from " + TABLE + " where id = ?";
         return execute(sql, new Object[]{id}) >= 1;
     }
@@ -31,7 +31,7 @@ public class KeyRecordDaoImpl extends BaseDaoImpl<KeyRecord> implements KeyRecor
         return execute(sql, new Object[]{t.getUser(), t.getTime(), t.getBeatNum(), t.getId()}) == 1;
     }
 
-    public KeyRecord getObjectById(int id) {
+    public KeyRecord findById(int id) {
         String sql = "select * from " + TABLE + " where id = ?";
         List<KeyRecord> list = select(sql, new Object[]{id}, KeyRecord.class);
         if (list != null && list.size() > 0) {

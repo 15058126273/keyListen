@@ -9,24 +9,24 @@ import java.util.List;
 public interface BaseDao<T> {
 
     // 保存实体
-    boolean add(T t);
+    boolean save(T t);
 
     // 根据id删除
-    boolean remove(int id);
+    boolean delete(int id);
 
     // 更新实体数据
     boolean update(T t);
 
     // 用id获取一个实体
-    T getObjectById(int id);
+    T findById(int id);
 
     // 自定义获取一个实体
-    T getObject(T t);
+    T findByT(T t);
 
     // 自定义获取一个集合
-    List<T> getObjects(T t);
+    List<T> findListByT(T t);
 
     // 获取所有实体
-    List<T> getObjects();
+    List<T> findAll();
 
 }

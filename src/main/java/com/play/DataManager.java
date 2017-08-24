@@ -70,7 +70,7 @@ class DataManager extends Base {
         keyRecord.setBeatNum(addNum);
         keyRecord.setTime(now);
         keyRecord.setUser(HOST_ADDRESS);
-        KeyRecordDaoImpl.keyRecordDao.add(keyRecord);
+        KeyRecordDaoImpl.keyRecordDao.save(keyRecord);
         // 更新日记录
         return addToDayRecord(count, now);
     }
@@ -84,12 +84,12 @@ class DataManager extends Base {
         KeyRecordDayDaoImpl keyRecordDayDao = KeyRecordDayDaoImpl.keyRecordDayDao;
         KeyRecordDay keyRecordDay = new KeyRecordDay(HOST_ADDRESS);
         keyRecordDay.setDate(now);
-        keyRecordDay = keyRecordDayDao.getObject(keyRecordDay);
+        keyRecordDay = keyRecordDayDao.findByT(keyRecordDay);
         if (keyRecordDay == null) {
             keyRecordDay = new KeyRecordDay(HOST_ADDRESS);
             keyRecordDay.setDate(now);
             keyRecordDay.setBeatNum(count);
-            keyRecordDayDao.add(keyRecordDay);
+            keyRecordDayDao.save(keyRecordDay);
         } else {
             if (count != 0) {
                 keyRecordDay.setBeatNum(count);

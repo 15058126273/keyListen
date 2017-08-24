@@ -17,12 +17,12 @@ public class KeyRecordDayDaoImpl extends BaseDaoImpl<KeyRecordDay> implements Ke
     private static final String TABLE = Constants.DATA_BASE + "key_record_day";
     public static KeyRecordDayDaoImpl keyRecordDayDao = new KeyRecordDayDaoImpl();
 
-    public boolean add(KeyRecordDay t) {
+    public boolean save(KeyRecordDay t) {
         String sql = "insert into " + TABLE + " (id, user, date, beat_num) values (?,?,?,?)";
         return execute(sql, new Object[]{t.getId(), t.getUser(), t.getDate(), t.getBeatNum()}) == 1;
     }
 
-    public boolean remove(int id) {
+    public boolean delete(int id) {
         String sql = "delete from " + TABLE + " where id = ?";
         return execute(sql, new Object[]{id}) >= 1;
     }
@@ -32,7 +32,7 @@ public class KeyRecordDayDaoImpl extends BaseDaoImpl<KeyRecordDay> implements Ke
         return execute(sql, new Object[]{t.getUser(), t.getDate(), t.getBeatNum(), t.getId()}) == 1;
     }
 
-    public KeyRecordDay getObjectById(int id) {
+    public KeyRecordDay findById(int id) {
         String sql = "select * from " + TABLE + " where id = ?";
         List<KeyRecordDay> list = select(sql, new Object[]{id}, KeyRecordDay.class);
         if (list != null && list.size() > 0) {
@@ -41,7 +41,7 @@ public class KeyRecordDayDaoImpl extends BaseDaoImpl<KeyRecordDay> implements Ke
         return null;
     }
 
-    public KeyRecordDay getObject(KeyRecordDay t) {
+    public KeyRecordDay findByT(KeyRecordDay t) {
         String sql = "select * from " + TABLE + " where 1 = 1 ";
         List<Object> paramList = new ArrayList<Object>();
         if (t.getId() != null) {
