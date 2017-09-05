@@ -44,6 +44,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         return null;
     }
 
+    public List<T> findPage(int pageNo, int pageSize) {
+        return null;
+    }
+
     /**
      * 执行增删改
      * @param sql sql

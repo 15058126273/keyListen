@@ -29,4 +29,7 @@ public interface BaseDao<T> {
     // 获取所有实体
     List<T> findAll();
 
+    // 获取分页数据
+    List<T> findPage(int pageNo, int pageSize);
+
 }

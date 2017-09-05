@@ -7,10 +7,9 @@ import com.play.entity.KeyRecord;
 import com.play.entity.KeyRecordDay;
 import org.apache.log4j.Logger;
 
+import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * 程序数据处理
@@ -46,8 +45,15 @@ class DataManager extends Base {
                         // 如果是新的一天,则总键数归0
                         String nowDay = simpleDateFormat1.format(new Date());
                         if (!nowDay.equals(currentDate)) {
-                            count = 0;
-                            currentCount = 0;
+                            if (!"".equals(currentDate)) {
+                                Vector vector = new Vector();
+                                vector.add(nowDay);
+                                vector.add(0);
+                                DefaultTableModel defaultTableModel = (DefaultTableModel)MyFrame.table.getModel();
+                                defaultTableModel.insertRow(0, vector);
+                                count = 0;
+                                currentCount = 0;
+                            }
                             currentDate = nowDay;
                         }
                     }
@@ -97,5 +103,20 @@ class DataManager extends Base {
             }
         }
         return keyRecordDay.getBeatNum();
+    }
+
+    public static Vector<Vector> findByDate() {
+        Vector<Vector> data = new Vector<>();
+        KeyRecordDayDaoImpl keyRecordDayDao = KeyRecordDayDaoImpl.keyRecordDayDao;
+        List<KeyRecordDay> list = keyRecordDayDao.findPage(1,10);
+        if (list != null) {
+            for (KeyRecordDay keyRecordDay : list) {
+                Vector<Object> vector = new Vector<>();
+                vector.add(keyRecordDay.getDateString());
+                vector.add(keyRecordDay.getBeatNum());
+                data.add(vector);
+            }
+        }
+        return data;
     }
 }

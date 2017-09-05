@@ -12,6 +12,8 @@ public class KeyRecordDay implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     private Integer id; // id
     private String user; // 用户
     private Date date; // 时间
@@ -45,6 +47,13 @@ public class KeyRecordDay implements Serializable {
         } catch (Exception e) {
             this.date = date;
         }
+    }
+
+    public String getDateString() {
+        if (date != null) {
+            return sdf.format(date);
+        }
+        return null;
     }
 
     public void setDate(Long date) {

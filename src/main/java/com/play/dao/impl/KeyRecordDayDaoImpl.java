@@ -67,4 +67,10 @@ public class KeyRecordDayDaoImpl extends BaseDaoImpl<KeyRecordDay> implements Ke
         return null;
     }
 
+    public List<KeyRecordDay> findPage(int pageNo, int pageSize) {
+        int start = (pageNo - 1) * pageSize, limit = pageSize;
+        String sql = "select * from " + TABLE + " order by id desc limit " + start + ", " + limit;
+        return select(sql, new Object[]{}, KeyRecordDay.class);
+    }
+
 }

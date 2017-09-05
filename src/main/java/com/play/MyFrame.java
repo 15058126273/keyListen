@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Vector;
 
 /**
  * .
@@ -19,6 +19,8 @@ class MyFrame extends JFrame {
     private boolean closeFirst = true;
     private boolean hideFirst = true;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static JTable table;
+
 
     MyFrame() {
 
@@ -26,30 +28,25 @@ class MyFrame extends JFrame {
 
         // 获得系统托盘的实例
         SystemTray systemTray = SystemTray.getSystemTray();
-        setSize(600,300);
-        setLayout(new GridLayout(4, 20));
-        setLocationRelativeTo(null); // Frame在窗体居中
-        //lable组件
-        java.awt.Label label1 = new Label("记键器运行中...");
-        label1.setFont(new Font(null, 0, 14));
-        add(label1);
 
-        java.awt.Label label2 = new Label("当前时间: 0000-00-00 00:00:00");
-        label2.setFont(new Font(null, 0, 14));
-        add(label2);
+        this.setBounds(100,100,200,100);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null); // Frame在窗体居中
 
+        Vector columns = new Vector();
+        columns.add("日期");
+        columns.add("键数");
+        Vector<Vector> data = DataManager.findByDate();
+        table = new JTable(data, columns);
+        JScrollPane scrollPane = new JScrollPane(table);
+        this.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        java.awt.Label label3 = new Label("今日总键数: 刷新中...");
-        label3.setFont(new Font(null, 0, 14));
-        label3.setForeground(new Color(255, 0, 0));
-        add(label3);
 
         new Thread(() -> {
             for (;;) {
                 try {
-                    label2.setText("当前时间: " + sdf.format(new Date()));
-                    label3.setText("今日总键数: " + DataManager.count);
                     Thread.sleep(1000L);
+                    table.setValueAt(DataManager.count, 0, 1);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "系统错误,请尝试重新启动", "提示",JOptionPane.WARNING_MESSAGE);
                     System.exit(0);
@@ -57,9 +54,9 @@ class MyFrame extends JFrame {
             }
         }).start();
 
-        pack();//调整窗口以容纳所有的组件
-        setVisible(true);//显示窗口
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.pack();//调整窗口以容纳所有的组件
+        this.setVisible(true);//显示窗口
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         try {
             trayIcon = new TrayIcon(ImageIO.read(new File("resource/timg.png")));
             PopupMenu popupMenu = new PopupMenu(); // 创建弹出菜单
