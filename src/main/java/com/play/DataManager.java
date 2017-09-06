@@ -42,10 +42,10 @@ class DataManager extends Base {
                         currentCount = count;
                         currentTime = time;
 
-                        // 如果是新的一天,则总键数归0
                         String nowDay = simpleDateFormat1.format(new Date());
-                        if (!nowDay.equals(currentDate)) {
-                            if (!"".equals(currentDate)) {
+                        if (!currentDate.equals(nowDay)) {
+                            // 如果是新的一天,则插入一行数据
+                            if (!"".equals(currentDate) && MyFrame.table != null) {
                                 Vector vector = new Vector();
                                 vector.add(nowDay);
                                 vector.add(0);
@@ -105,7 +105,7 @@ class DataManager extends Base {
         return keyRecordDay.getBeatNum();
     }
 
-    public static Vector<Vector> findByDate() {
+    static Vector<Vector> findByDate() {
         Vector<Vector> data = new Vector<>();
         KeyRecordDayDaoImpl keyRecordDayDao = KeyRecordDayDaoImpl.keyRecordDayDao;
         List<KeyRecordDay> list = keyRecordDayDao.findPage(1,10);
@@ -118,5 +118,9 @@ class DataManager extends Base {
             }
         }
         return data;
+    }
+
+    static String getCurrentDate() {
+        return currentDate;
     }
 }
