@@ -54,6 +54,7 @@ class DataManager extends Base {
                                 count = 0;
                                 currentCount = 0;
                             }
+                            if ("".equals(currentDate)) Main.getFrame().dataWorker();
                             currentDate = nowDay;
                         }
                     }

@@ -26,13 +26,13 @@ public class Main extends Base {
         ServerInit.getInstance().initAll();
         log.info("init success....");
 
-        // 启动更新数据线程
-        new DataManager();
-        log.info("start dataManager success....");
-
         // 开启程序窗口
         frame = new MyFrame();
         log.info("start frame success....");
+
+        // 启动更新数据线程
+        new DataManager();
+        log.info("start dataManager success....");
 
         // 启动监听键盘线程
         keyHook = new KeyHook();

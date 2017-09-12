@@ -18,31 +18,52 @@ class MyFrame extends JFrame {
     private boolean closeFirst = true;
     private boolean hideFirst = true;
     static JTable table;
+    static DefaultTableModel model;
 
     MyFrame() {
 
         super("记键器");
-        this.setVisible(true);//显示窗口
+        // 设置显示Frame
+        this.setVisible(true);
+        // 设置Frame位置和大小
         this.setBounds(100,100,200,100);
+        // 设置关闭Frame事件
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        this.setLocationRelativeTo(null); // Frame在窗体居中
+        // 设置Frame在窗体居中
+        this.setLocationRelativeTo(null);
 
-        Vector columns = new Vector();
+        // 新建一个表格
+        table = new JTable();
+        // 建立表格模型
+        model = new DefaultTableModel();
+        // 初始化表格数据
+        Vector<String> columns = new Vector<>();
         columns.add("日期");
         columns.add("键数");
-        table = new JTable(null, columns);
+        model.setDataVector(null, columns);
+        // 设置表格模型
+        table.setModel(model);
+        // 设置表格不可编辑
+        table.setEnabled(false);
         JScrollPane scrollPane = new JScrollPane(table);
         this.getContentPane().add(scrollPane, BorderLayout.CENTER);
-        this.pack();//调整窗口以容纳所有的组件
+        // 调整窗口以容纳所有的组件
+        this.pack();
+        // 处理注册窗口事件
+        handleSystemTray();
+    }
 
-        // 延迟载入数据
-        for (;"".equals(DataManager.getCurrentDate());) {}
+    /**
+     * 1.数据初始化
+     * 2.启动数据更新线程
+     */
+    void dataWorker() {
+        // 载入历史数据
         Vector<Vector> data = DataManager.findByDate();
         if (data != null && data.size() > 0) {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
             data.stream().forEachOrdered(model::addRow);
         }
-
+        // 开启更新数据线程
         new Thread(() -> {
             for (;;) {
                 try {
@@ -55,8 +76,6 @@ class MyFrame extends JFrame {
             }
         }).start();
 
-        // 处理注册窗口事件
-        handleSystemTray();
     }
 
     private void handleSystemTray() {
