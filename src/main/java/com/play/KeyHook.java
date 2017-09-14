@@ -15,7 +15,7 @@ class KeyHook extends Base {
 
     private static HHOOK hhk;
 
-    public KeyHook () {
+    KeyHook () {
         // 启动监听键盘线程
         final User32 lib = User32.INSTANCE;
         HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);

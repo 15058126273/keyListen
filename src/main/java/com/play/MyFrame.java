@@ -2,6 +2,7 @@ package com.play;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,7 +18,7 @@ class MyFrame extends JFrame {
     private TrayIcon trayIcon;//托盘图标
     private boolean closeFirst = true;
     private boolean hideFirst = true;
-    static JTable table;
+    private static JTable table;
     static DefaultTableModel model;
 
     MyFrame() {
@@ -45,6 +46,11 @@ class MyFrame extends JFrame {
         table.setModel(model);
         // 设置表格不可编辑
         table.setEnabled(false);
+        // 设置表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        table.setDefaultRenderer(Object.class, r);
+        table.setRowHeight(30);
         JScrollPane scrollPane = new JScrollPane(table);
         this.getContentPane().add(scrollPane, BorderLayout.CENTER);
         // 调整窗口以容纳所有的组件

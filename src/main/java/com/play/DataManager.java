@@ -18,37 +18,62 @@ import java.util.*;
 class DataManager extends Base {
 
     private static final Logger log = Logger.getLogger(DataManager.class);
-    private static String currentTime = "";
-    private static String currentDate = "";
-    private static int currentCount = 0;
-    static int count = 0;
+
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 
+    // 当前时间 (分)
+    private transient static String currentTime;
+    // 当前日期 (日)
+    private transient static String currentDate;
+    // 当日总键数
+    transient static int count = 0;
+
     DataManager() {
         new Thread(() -> {
+
+            Calendar calendar = new GregorianCalendar();
+
+            // 首次启动
+            if (currentTime == null) {
+                Date date = new Date();
+                count = addBeat(0, date);
+                currentDate = simpleDateFormat1.format(date);
+                calendar.setTime(new Date());
+                calendar.add(Calendar.MINUTE, -1);
+                date = calendar.getTime();
+                currentTime = simpleDateFormat.format(date);
+            }
+            log.debug("首次启动成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
+            // 通知Frame初始化数据
+            Main.getFrame().dataWorker();
+            log.debug("通知Frame初始化数据成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
+
             for (;;) {
                 try {
-                    Calendar calendar = new GregorianCalendar();
                     calendar.setTime(new Date());
                     calendar.add(Calendar.MINUTE, -1);
                     Date date = calendar.getTime();
                     String time = simpleDateFormat.format(date);
-                    if (!currentTime.equals(time)) {
-                        String thisDay = simpleDateFormat1.format(date);
-                        if (!currentDate.equals(thisDay)) {
-                            refreshDay(thisDay);
-                        }
-                        // 更新当日数据
-                        int addNum = count - currentCount;
-                        count = addBeat(count, addNum, date);
-                        currentCount = count;
+                    if (!time.equals(currentTime)) {
                         currentTime = time;
+                        String thisDay = simpleDateFormat1.format(date);
+                        if (currentDate.equals(thisDay)) {
+                            log.debug("更新数据前...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
+                            count = addBeat(count, date);
+                            log.debug("更新数据成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
+                        } else {
+                            log.debug("日期不同步, 更新取消...currentDate : " + currentDate + ", thisDay : " + thisDay + ", count : " + count);
+                        }
 
                         String nowDay = simpleDateFormat1.format(new Date());
                         if (!currentDate.equals(nowDay)) {
-                            refreshDay(nowDay);
+                            log.debug("更新日期..currentDate : " + currentDate + ", nowDay : " + nowDay);
+                            count = 0;
+                            currentDate = nowDay;
+                            addRowForNewDay(nowDay, count);
                         }
+                        log.debug("刷新成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
                     }
                     Thread.sleep(1000L);
                 } catch (Exception e) {
@@ -59,46 +84,43 @@ class DataManager extends Base {
     }
 
     /**
-     * 刷新日期
+     * 表格中插入一行数据
      * @param day 日期
      */
-    private void refreshDay(String day) {
-        // 如果是新的一天,则插入一行数据
-        if (!"".equals(currentDate) && MyFrame.table != null) {
-            Vector vector = new Vector();
-            vector.add(day);
-            vector.add(0);
-            DefaultTableModel defaultTableModel = (DefaultTableModel)MyFrame.table.getModel();
-            defaultTableModel.insertRow(0, vector);
-            count = 0;
-            currentCount = 0;
-        }
-        if ("".equals(currentDate)) Main.getFrame().dataWorker();
-        currentDate = day;
+    private void addRowForNewDay(String day, int count) {
+        Vector vector = new Vector();
+        vector.add(day);
+        vector.add(count);
+        DefaultTableModel defaultTableModel = MyFrame.model;
+        defaultTableModel.insertRow(0, vector);
     }
 
     /**
      * 更新键数
      * @param count 当前总键数
-     * @param addNum 新增键数
      * @param now 时间
+     * @return 当期总键数
      */
-    private static int addBeat(int count, int addNum, Date now) {
+    private static int addBeat(int count, Date now) {
+        int[] counts = addToDayRecord(count, now);
+        log.debug("当日总键数更新成功...addCount : " + counts[1] + ", count : " + counts[0]);
         KeyRecord keyRecord = new KeyRecord();
-        keyRecord.setBeatNum(addNum);
+        keyRecord.setBeatNum(counts[1]);
         keyRecord.setTime(now);
         keyRecord.setUser(HOST_ADDRESS);
         KeyRecordDaoImpl.keyRecordDao.save(keyRecord);
         // 更新日记录
-        return addToDayRecord(count, now);
+        return counts[0];
     }
 
     /**
      * 更新日记录
      * @param count 总键数
      * @param now 当前时间
+     * @return [当日总键数, 当前新增键数]
      */
-    private static int addToDayRecord(int count, Date now) {
+    private static int[] addToDayRecord(int count, Date now) {
+        int originCount = 0;
         KeyRecordDayDaoImpl keyRecordDayDao = KeyRecordDayDaoImpl.keyRecordDayDao;
         KeyRecordDay keyRecordDay = new KeyRecordDay(HOST_ADDRESS);
         keyRecordDay.setDate(now);
@@ -109,14 +131,22 @@ class DataManager extends Base {
             keyRecordDay.setBeatNum(count);
             keyRecordDayDao.save(keyRecordDay);
         } else {
+            originCount = keyRecordDay.getBeatNum();
             if (count != 0) {
                 keyRecordDay.setBeatNum(count);
                 keyRecordDayDao.update(keyRecordDay);
             }
         }
-        return keyRecordDay.getBeatNum();
+        int nowCount = keyRecordDay.getBeatNum();
+        int addCount = nowCount - originCount;
+        addCount = addCount < 0 ? 0 : addCount;
+        return new int[]{nowCount, addCount};
     }
 
+    /**
+     * 获取前10天的数据
+     * @return 每天的总键数
+     */
     static Vector<Vector> findByDate() {
         Vector<Vector> data = new Vector<>();
         KeyRecordDayDaoImpl keyRecordDayDao = KeyRecordDayDaoImpl.keyRecordDayDao;
@@ -132,7 +162,4 @@ class DataManager extends Base {
         return data;
     }
 
-    static String getCurrentDate() {
-        return currentDate;
-    }
 }
