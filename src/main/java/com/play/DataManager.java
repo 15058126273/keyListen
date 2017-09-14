@@ -35,27 +35,19 @@ class DataManager extends Base {
                     Date date = calendar.getTime();
                     String time = simpleDateFormat.format(date);
                     if (!currentTime.equals(time)) {
-                        int addNum = count - currentCount;
-
+                        String thisDay = simpleDateFormat1.format(date);
+                        if (!currentDate.equals(thisDay)) {
+                            refreshDay(thisDay);
+                        }
                         // 更新当日数据
+                        int addNum = count - currentCount;
                         count = addBeat(count, addNum, date);
                         currentCount = count;
                         currentTime = time;
 
                         String nowDay = simpleDateFormat1.format(new Date());
                         if (!currentDate.equals(nowDay)) {
-                            // 如果是新的一天,则插入一行数据
-                            if (!"".equals(currentDate) && MyFrame.table != null) {
-                                Vector vector = new Vector();
-                                vector.add(nowDay);
-                                vector.add(0);
-                                DefaultTableModel defaultTableModel = (DefaultTableModel)MyFrame.table.getModel();
-                                defaultTableModel.insertRow(0, vector);
-                                count = 0;
-                                currentCount = 0;
-                            }
-                            if ("".equals(currentDate)) Main.getFrame().dataWorker();
-                            currentDate = nowDay;
+                            refreshDay(nowDay);
                         }
                     }
                     Thread.sleep(1000L);
@@ -64,6 +56,25 @@ class DataManager extends Base {
                 }
             }
         }).start();
+    }
+
+    /**
+     * 刷新日期
+     * @param day 日期
+     */
+    private void refreshDay(String day) {
+        // 如果是新的一天,则插入一行数据
+        if (!"".equals(currentDate) && MyFrame.table != null) {
+            Vector vector = new Vector();
+            vector.add(day);
+            vector.add(0);
+            DefaultTableModel defaultTableModel = (DefaultTableModel)MyFrame.table.getModel();
+            defaultTableModel.insertRow(0, vector);
+            count = 0;
+            currentCount = 0;
+        }
+        if ("".equals(currentDate)) Main.getFrame().dataWorker();
+        currentDate = day;
     }
 
     /**
