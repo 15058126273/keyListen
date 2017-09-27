@@ -1,4 +1,4 @@
-package com.play;
+package com.yjy.keyListen;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -63,9 +63,7 @@ class MyFrame extends JFrame {
      * 1.数据初始化
      * 2.启动数据更新线程
      */
-    void dataWorker() {
-        // 载入历史数据
-        Vector<Vector> data = DataManager.findByDate();
+    void dataWorker(Vector<Vector> data) {
         if (data != null && data.size() > 0) {
             data.stream().forEachOrdered(model::addRow);
         }

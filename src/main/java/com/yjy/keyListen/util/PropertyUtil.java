@@ -1,6 +1,6 @@
-package com.play.util;
+package com.yjy.keyListen.util;
 
-import com.play.base.BaseUtil;
+import com.yjy.keyListen.base.BaseUtil;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

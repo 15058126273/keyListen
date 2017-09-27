@@ -1,11 +1,13 @@
-package com.play;
+package com.yjy.keyListen;
 
-import com.play.base.Base;
-import com.play.dao.impl.KeyRecordDaoImpl;
-import com.play.dao.impl.KeyRecordDayDaoImpl;
-import com.play.entity.KeyRecord;
-import com.play.entity.KeyRecordDay;
-import org.apache.log4j.Logger;
+import com.yjy.keyListen.base.Base;
+import com.yjy.keyListen.dao.impl.KeyRecordDaoImpl;
+import com.yjy.keyListen.dao.impl.KeyRecordDayDaoImpl;
+import com.yjy.keyListen.entity.KeyRecord;
+import com.yjy.keyListen.entity.KeyRecordDay;
+import com.yjy.keyListen.util.PropertyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
@@ -17,7 +19,7 @@ import java.util.*;
  */
 class DataManager extends Base {
 
-    private static final Logger log = Logger.getLogger(DataManager.class);
+    private static final Logger log = LoggerFactory.getLogger(DataManager.class);
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -31,23 +33,26 @@ class DataManager extends Base {
 
     DataManager() {
         new Thread(() -> {
-
             Calendar calendar = new GregorianCalendar();
-
-            // 首次启动
-            if (currentTime == null) {
-                Date date = new Date();
-                count = addBeat(0, date);
-                currentDate = simpleDateFormat1.format(date);
-                calendar.setTime(new Date());
-                calendar.add(Calendar.MINUTE, -1);
-                date = calendar.getTime();
-                currentTime = simpleDateFormat.format(date);
+            try {
+                // 首次启动
+                if (currentTime == null) {
+                    Date date = new Date();
+                    count = addBeat(0, date);
+                    currentDate = simpleDateFormat1.format(date);
+                    calendar.setTime(new Date());
+                    calendar.add(Calendar.MINUTE, -1);
+                    date = calendar.getTime();
+                    currentTime = simpleDateFormat.format(date);
+                }
+                log.debug("首次启动成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
+                // 通知Frame初始化数据
+                Main.getFrame().dataWorker(findByDate());
+                log.debug("通知Frame初始化数据成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
+            } catch (Exception e) {
+                log.error("init DataManager throw an error", e);
+                throw new RuntimeException(e);
             }
-            log.debug("首次启动成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
-            // 通知Frame初始化数据
-            Main.getFrame().dataWorker();
-            log.debug("通知Frame初始化数据成功...count: " + count + ", currentTime : " + currentTime + ", currentDate : " + currentDate);
 
             for (;;) {
                 try {
@@ -147,10 +152,12 @@ class DataManager extends Base {
      * 获取前10天的数据
      * @return 每天的总键数
      */
-    static Vector<Vector> findByDate() {
+    private static Vector<Vector> findByDate() throws Exception {
+        Properties properties = PropertyUtil.getInstance().getProperties(CONFIG_ROOT + "conf.properties");
+        Integer showRows = Integer.parseInt(properties.getProperty("showRows"));
         Vector<Vector> data = new Vector<>();
         KeyRecordDayDaoImpl keyRecordDayDao = KeyRecordDayDaoImpl.keyRecordDayDao;
-        List<KeyRecordDay> list = keyRecordDayDao.findPage(1,10);
+        List<KeyRecordDay> list = keyRecordDayDao.findPage(1,showRows);
         if (list != null) {
             for (KeyRecordDay keyRecordDay : list) {
                 Vector<Object> vector = new Vector<>();

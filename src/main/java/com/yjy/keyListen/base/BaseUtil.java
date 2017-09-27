@@ -1,4 +1,4 @@
-package com.play.base;
+package com.yjy.keyListen.base;
 
 /**
  * 项目内工具类基类

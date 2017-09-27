@@ -1,7 +1,8 @@
-package com.play.base;
+package com.yjy.keyListen.base;
 
-import com.play.util.SQLiteUtil;
-import org.apache.log4j.Logger;
+import com.yjy.keyListen.util.SQLiteUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class BaseDaoImpl<T> implements BaseDao<T> {
 
-    private static final Logger log = Logger.getLogger(BaseDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(BaseDaoImpl.class);
 
     public boolean save(T t) {
         return false;
@@ -121,10 +122,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
                             Object o = rs.getObject(column);
                             try {
                                 m.invoke(obj, o);// 获取rs中对应的值，封装到obj中
-                                log.debug("map column success > column : " + column);
+                                log.debug("map column success > column : {}", column);
                                 break;
                             } catch (Exception e){
-                                log.debug("setMethod arguments is illegal, illegal column : " + column + ", type : " + o.getClass().getName());
+                                log.debug("setMethod arguments is illegal, illegal column : {}, type: {}", column, o.getClass().getName());
                             }
                         }
                     }

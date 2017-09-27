@@ -1,9 +1,9 @@
-package com.play.dao.impl;
+package com.yjy.keyListen.dao.impl;
 
-import com.play.Constants;
-import com.play.base.BaseDaoImpl;
-import com.play.dao.KeyRecordDao;
-import com.play.entity.KeyRecord;
+import com.yjy.keyListen.Constants;
+import com.yjy.keyListen.base.BaseDaoImpl;
+import com.yjy.keyListen.dao.KeyRecordDao;
+import com.yjy.keyListen.entity.KeyRecord;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.play;
+package com.yjy.keyListen;
 
-import com.play.base.Base;
+import com.yjy.keyListen.base.Base;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.User32;

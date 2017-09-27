@@ -1,9 +1,9 @@
-package com.play.dao.impl;
+package com.yjy.keyListen.dao.impl;
 
-import com.play.Constants;
-import com.play.base.BaseDaoImpl;
-import com.play.dao.KeyRecordDayDao;
-import com.play.entity.KeyRecordDay;
+import com.yjy.keyListen.Constants;
+import com.yjy.keyListen.base.BaseDaoImpl;
+import com.yjy.keyListen.dao.KeyRecordDayDao;
+import com.yjy.keyListen.entity.KeyRecordDay;
 
 import java.util.ArrayList;
 import java.util.List;

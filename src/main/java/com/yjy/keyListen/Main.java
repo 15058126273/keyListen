@@ -1,10 +1,10 @@
-package com.play;
+package com.yjy.keyListen;
 
-import com.play.base.Base;
-import org.apache.log4j.Logger;
+import com.yjy.keyListen.base.Base;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Timer;
 
 /**
  * 主程序启动类
@@ -12,7 +12,7 @@ import java.util.Timer;
  */
 public class Main extends Base {
 
-    private static final Logger log = Logger.getLogger(Main.class);
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static MyFrame frame;
 
     /**

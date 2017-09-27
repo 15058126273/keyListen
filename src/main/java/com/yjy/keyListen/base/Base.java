@@ -1,4 +1,4 @@
-package com.play.base;
+package com.yjy.keyListen.base;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -11,7 +11,7 @@ public class Base {
 
     protected static final String PROJECT_NAME = "keyRecord";
 
-    protected static final String CONFIG_ROOT = "config";
+    protected static final String CONFIG_ROOT = "config/";
 
     protected static String HOST_ADDRESS = "未知";
 

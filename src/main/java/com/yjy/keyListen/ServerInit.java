@@ -1,10 +1,11 @@
-package com.play;
+package com.yjy.keyListen;
 
-import com.play.base.Base;
-import com.play.util.PropertyUtil;
-import com.play.util.SQLiteUtil;
-import org.apache.log4j.Logger;
+import com.yjy.keyListen.base.Base;
+import com.yjy.keyListen.util.PropertyUtil;
+import com.yjy.keyListen.util.SQLiteUtil;
 import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,7 +19,7 @@ import java.util.Properties;
  */
 class ServerInit extends Base {
 
-    private static final Logger log = Logger.getLogger(ServerInit.class);
+    private static final Logger log = LoggerFactory.getLogger(ServerInit.class);
 
     private ServerInit() {}
 
@@ -42,7 +43,7 @@ class ServerInit extends Base {
      * @throws IOException ioException
      */
     private void initLog4j() throws IOException{
-        Properties properties = PropertyUtil.getInstance().getProperties(CONFIG_ROOT + "/log4j.properties");
+        Properties properties = PropertyUtil.getInstance().getProperties(CONFIG_ROOT + "log4j.properties");
         PropertyConfigurator.configure(properties);
         log.info("initLog4j success>>>>>>>>>>>>>>>>>>>>");
     }

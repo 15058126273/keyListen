@@ -1,4 +1,4 @@
-package com.play.entity;
+package com.yjy.keyListen.entity;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

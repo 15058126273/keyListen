@@ -1,8 +1,8 @@
-package com.play.dao;
+package com.yjy.keyListen.dao;
 
 
-import com.play.base.BaseDao;
-import com.play.entity.KeyRecordDay;
+import com.yjy.keyListen.base.BaseDao;
+import com.yjy.keyListen.entity.KeyRecordDay;
 
 /**
  * .

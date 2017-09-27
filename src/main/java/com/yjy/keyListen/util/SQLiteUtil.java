@@ -1,9 +1,11 @@
-package com.play.util;
+package com.yjy.keyListen.util;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
-import com.play.base.BaseUtil;
-import org.apache.log4j.Logger;
+import com.yjy.keyListen.base.BaseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Properties;
@@ -15,15 +17,15 @@ import java.util.Properties;
  */
 public class SQLiteUtil extends BaseUtil {
 
-    private static final Logger log = Logger.getLogger(SQLiteUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(SQLiteUtil.class);
     private static DataSource ds = new ComboPooledDataSource();
 
     static {
         try {
-            Properties c3p0Properties = PropertyUtil.getInstance().getProperties(CONFIG_ROOT + "/c3p0.properties");
+            Properties c3p0Properties = PropertyUtil.getInstance().getProperties(CONFIG_ROOT + "c3p0.properties");
             Class.forName(c3p0Properties.getProperty("driverClass"));
 
-            log.debug("c3p0Properties : " + c3p0Properties);
+            log.debug("c3p0Properties : {}", c3p0Properties);
             //常规数据库连接属性
             Properties jdbcProperties = new Properties();
             //连接池配置属性

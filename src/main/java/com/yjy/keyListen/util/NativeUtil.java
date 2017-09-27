@@ -1,9 +1,6 @@
-package com.play.util;
+package com.yjy.keyListen.util;
 
-import com.play.base.BaseUtil;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import com.yjy.keyListen.base.BaseUtil;
 
 /**
  * 本地工具方法
