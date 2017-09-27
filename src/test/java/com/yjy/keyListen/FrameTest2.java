@@ -1,4 +1,4 @@
-package com.play;
+package com.yjy.keyListen;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,19 +20,13 @@ public class FrameTest2 extends JFrame {
         super("系统托盘图标");
         systemTray = SystemTray.getSystemTray();//获得系统托盘的实例
         setSize(150,150);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         try {
             trayIcon = new TrayIcon(ImageIO.read(new File("D:\\桌面-历史项目\\美图一堆堆\\1366137.gif")));
             PopupMenu popupMenu = new PopupMenu(); // 创建弹出菜单
             MenuItem exit = new MenuItem("退出"); // 创建菜单项
             //响应方法
-            exit.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
-                }
-
-            });
+            exit.addActionListener(e -> System.exit(0));
 
             popupMenu.add(exit); // 为弹出菜单添加菜单项
             trayIcon.setPopupMenu(popupMenu); // 为托盘图标加弹出菜弹
