@@ -1,11 +1,11 @@
 #idea
-.idea
+#.idea
 .svn
 target
 */target
 classes
 # Logs
-#logs
+logs
 *.log
 
 # Runtime data
