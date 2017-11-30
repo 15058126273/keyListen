@@ -10,6 +10,8 @@ import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.HHOOK;
 import com.sun.jna.platform.win32.WinUser.LowLevelKeyboardProc;
 
+import static com.yjy.keyListen.VkCode.*;
+
 /** Sample implementation of a low-level keyboard hook on W32. */
 class KeyHook extends Base {
 
@@ -21,7 +23,12 @@ class KeyHook extends Base {
         HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
         LowLevelKeyboardProc keyboardHook = (nCode, wParam, info) -> {
             if (wParam.intValue() == 256) {
-                DataManager.count++;
+                int vkCode = info.vkCode;
+                if ((vkCode >= CODE_0 && vkCode <= CODE_9)
+                        || (vkCode >= CODE_NUMPAD0 && vkCode <= CODE_NUMPAD9)
+                        || (vkCode >= CODE_A && vkCode <= CODE_Z)) {
+                    DataManager.count++;
+                }
             }
             Pointer ptr = info.getPointer();
             long peer = Pointer.nativeValue(ptr);
@@ -33,6 +40,5 @@ class KeyHook extends Base {
         WinUser.MSG msg = new WinUser.MSG();
         lib.GetMessage(msg, null, 0, 0);
     }
-
 
 }
